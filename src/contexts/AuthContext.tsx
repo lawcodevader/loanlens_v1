@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User } from '../types';
-import { UserRole } from '../constants/roles';
+import { UserRole, roles } from '../constants/roles';
 
 interface AuthContextType {
   user: User | null;
@@ -23,6 +23,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const storedUser = localStorage.getItem('pvlas_user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
+    } else {
+      // Temporary auto-login for testing
+      const testUser: User = {
+        id: 'test-admin',
+        mobile: '1234567890',
+        name: 'Test Admin',
+        email: 'admin@test.com',
+        role: roles.ADMIN,
+      };
+      setUser(testUser);
+      localStorage.setItem('pvlas_user', JSON.stringify(testUser));
     }
     setLoading(false);
   }, []);
